@@ -1,0 +1,67 @@
+package(
+    default_visibility = [
+        "//visibility:public",
+    ],
+)
+
+load("//build/kernel/kleaf:kernel.bzl", "ddk_headers", "ddk_uapi_headers")
+
+ddk_headers(
+    name = "audio_common_headers",
+    hdrs = glob([
+        "include/asoc/*.h",
+        "include/bindings/*.h",
+        "include/dsp/*.h",
+        "include/ipc/*.h",
+        "include/soc/*.h"
+    ]),
+    includes = ["include"]
+)
+filegroup(
+    name = "_audio_uapi_headers",
+    srcs = glob([
+        "include/uapi/audio/**/*.h",
+    ]),
+)
+ddk_headers(
+    name = "audio_uapi_headers",
+    hdrs = [
+        ":_audio_uapi_headers",
+    ],
+    includes = ["include/uapi/audio"]
+)
+ddk_headers(
+    name = "audio_src_headers",
+    hdrs = glob([
+        "asoc/**/*.h",
+        "dsp/**/*.h",
+        "ipc/**/*.h",
+        "soc/**/*.h"
+    ])
+)
+ddk_headers(
+    name = "audio_configs",
+    hdrs = glob([
+        "config/*.h"
+    ]),
+    includes = ["config"]
+)
+ddk_headers(
+    name = "audio_headers",
+    hdrs = [":audio_common_headers",  ":audio_uapi_headers", ":audio_src_headers", ":audio_configs"]
+)
+ddk_uapi_headers(
+    name = "msm_audio_uapi_headers",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    out = "msm-audio-uapi-headers.tar.gz",
+    srcs = [
+        ":_audio_uapi_headers",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+load(":build/monaco.bzl", "define_monaco")
+
+define_monaco()

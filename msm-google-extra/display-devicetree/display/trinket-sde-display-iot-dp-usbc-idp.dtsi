@@ -1,0 +1,5 @@
+#include "trinket-sde-display-iot-dp-idp.dtsi"
+
+&sde_dp {
+	status = "disabled";
+};

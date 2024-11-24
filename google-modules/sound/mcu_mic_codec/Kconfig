@@ -1,0 +1,4 @@
+config SND_SOC_MCU_MIC_CODEC
+    tristate "ASOC MCU Mic codec"
+    help
+    	  ASOC Codec driver to communicate with Microphone on MCU.

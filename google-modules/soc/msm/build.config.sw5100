@@ -1,0 +1,17 @@
+KERNEL_DIR=private/msm-google
+SOC_MODULES_DIR=private/google-modules/soc/msm
+#  This is the base defconfig file
+DEFCONFIG=gki_defconfig
+KCONFIG_EXT_MODULES_PREFIX=$(realpath ${ROOT_DIR} --relative-to ${KERNEL_DIR})/
+
+DTC_FLAGS="-@"
+DTC_INCLUDE=${ROOT_DIR}/${SOC_MODULES_DIR}/include/dtc
+MKDTIMG_FLAGS="--page_size=4096 --id=/:board_id --rev=/:board_rev"
+
+BOOT_IMAGE_HEADER_VERSION=4
+KERNEL_BINARY=Image
+PAGE_SIZE=4096
+LZ4_RAMDISK=1
+TRIM_UNUSED_MODULES=1
+
+WLAN_PROFILE=wear

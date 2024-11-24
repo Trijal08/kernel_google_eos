@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: GPL-2.0
+
+&spf_core_platform {
+	cc_quat_mi2s_gpios: cc_pinctrl_quat {
+		compatible = "qcom,msm-cdc-pinctrl";
+		pinctrl-names = "aud_active", "aud_sleep";
+		pinctrl-0 = <&quat_mi2s_sck_active &quat_mi2s_ws_active
+				&quat_mi2s_sd0_active &quat_mi2s_sd1_active>;
+
+		pinctrl-1 = < &quat_mi2s_sck_sleep &quat_mi2s_ws_sleep
+				&quat_mi2s_sd0_sleep &quat_mi2s_sd1_sleep>;
+		qcom,lpi-gpios;
+		#gpio-cells = <0>;
+	};
+
+	cc_pri_mi2s_gpios: cc_pinctrl_pri {
+		compatible = "qcom,msm-cdc-pinctrl";
+		pinctrl-names = "aud_active", "aud_sleep";
+		pinctrl-0 = <&lpi_i2s1_sck_active &lpi_i2s1_ws_active
+				&lpi_i2s1_sd0_active &lpi_i2s1_sd1_active>;
+
+		pinctrl-1 = <&lpi_i2s1_sck_sleep &lpi_i2s1_ws_sleep
+				&lpi_i2s1_sd0_sleep &lpi_i2s1_sd1_sleep>;
+		qcom,lpi-gpios;
+		#gpio-cells = <0>;
+	};
+};

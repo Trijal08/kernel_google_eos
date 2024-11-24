@@ -1,0 +1,11 @@
+#
+# Novatek NT383x0 touchscreen driver configuration
+#
+config TOUCHSCREEN_NT383x0
+	bool "Novatek NT383x0"
+	default y
+	help
+	  Say Y here if you have a Novatek NT383x0 touchscreen connected
+	  to your system.
+
+	  If unsure, say N.

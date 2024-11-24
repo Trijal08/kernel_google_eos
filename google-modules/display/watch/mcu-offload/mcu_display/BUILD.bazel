@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "ddk_headers",
+    "ddk_module",
+)
+
+ddk_headers(
+    name = "mcu_display_headers",
+    hdrs = [
+        "include/mcu_display_exports.h",
+    ],
+    includes = ["include"],
+    visibility = [
+        "//private/google-modules:__subpackages__",
+        "//private/msm-google-modules/display:__subpackages__",
+    ],
+)
+
+ddk_module(
+    name = "mcu_display",
+    srcs = glob([
+        "**/*.c",
+    ]) + [
+        "mcu_display_nanohub.h",
+    ],
+    out = "mcu_display.ko",
+    hdrs = [
+        ":mcu_display_headers",
+    ],
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules:__subpackages__",
+        "//private/msm-google-modules/display:__subpackages__",
+    ],
+    deps = [
+        "//private/google-modules/nanohub",
+        "//private/google-modules/nanohub:include_nanohub_headers",
+        "//private/msm-google:all_headers",
+    ],
+)

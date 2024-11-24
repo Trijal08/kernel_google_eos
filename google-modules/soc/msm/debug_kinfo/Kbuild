@@ -1,0 +1,1 @@
+obj-m       += debug_snapshot_debug_kinfo.o

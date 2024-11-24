@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/bms/misc/Kconfig"
+
+source "$(KCONFIG_EXT_MODULES_PREFIX)private/google-modules/nanohub/Kconfig"

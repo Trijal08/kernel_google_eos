@@ -1,0 +1,58 @@
+# sdio specific kernel config
+# Copyright (C) 2023, Broadcom.
+#
+#      Unless you and Broadcom execute a separate written software license
+# agreement governing use of this software, this software is licensed to you
+# under the terms of the GNU General Public License version 2 (the "GPL"),
+# available at http://www.broadcom.com/licenses/GPLv2.php, with the
+# following added to such license:
+#
+#      As a special exception, the copyright holders of this software give you
+# permission to link this software with independent modules, and to copy and
+# distribute the resulting executable under terms of your choice, provided that
+# you also meet, for each linked independent module, the terms and conditions of
+# the license of that module.  An independent module is a module which is not
+# derived from this software.  The special exception does not apply to any
+# modifications of the software.
+#
+#
+# <<Broadcom-WL-IPTag/Open:>>
+#
+# bcmdhd
+CONFIG_BCMDHD=m
+# CONFIG_BCM4354 is not set
+# CONFIG_BCM4356 is not set
+# CONFIG_BCM4359 is not set
+# CONFIG_BCM4362 is not set
+# CONFIG_BCM4375 is not set
+CONFIG_BCM43752=y
+CONFIG_BCMDHD_FW_PATH="\"/vendor/etc/wifi/fw_bcmdhd.bin\""
+CONFIG_BCMDHD_NVRAM_PATH="\"/vendor/etc/wifi/bcmdhd.cal\""
+CONFIG_BCMDHD_CLM_PATH="\"/vendor/etc/wifi/bcmdhd_clm.blob\""
+CONFIG_BCMDHD_CONFIG_PATH="\"/vendor/etc/wifi/wlan_config.ini\""
+CONFIG_BCMDHD_MAP_PATH="\"/vendor/etc/wifi/fw_bcmdhd.map\""
+CONFIG_BROADCOM_WIFI_RESERVED_MEM=y
+# CONFIG_DHD_USE_STATIC_BUF is not set
+CONFIG_DHD_USE_SCHED_SCAN=y
+CONFIG_DHD_SET_RANDOM_MAC_VAL=0x001A11
+CONFIG_WLAN_REGION_CODE=100
+CONFIG_WLAIBSS=y
+CONFIG_WL_RELMCAST=y
+# CONFIG_WL_NAN is not set
+CONFIG_BCMDHD_PREALLOC_MEMDUMP=y
+# CONFIG_BCMDHD_OOB_HOST_WAKE is not set
+CONFIG_BCMDHD_SDIO=y
+
+
+DHDCFLAGS += -DCONFIG_BCMDHD_FW_PATH=$(CONFIG_BCMDHD_FW_PATH)
+DHDCFLAGS += -DCONFIG_BCMDHD_NVRAM_PATH=$(CONFIG_BCMDHD_NVRAM_PATH)
+DHDCFLAGS += -DCONFIG_BCMDHD_CLM_PATH=$(CONFIG_BCMDHD_CLM_PATH)
+DHDCFLAGS += -DCONFIG_BCMDHD_CONFIG_PATH=$(CONFIG_BCMDHD_CONFIG_PATH)
+DHDCFLAGS += -DCONFIG_BCMDHD_MAP_PATH=$(CONFIG_BCMDHD_MAP_PATH)
+DHDCFLAGS += -DCONFIG_BROADCOM_WIFI_RESERVED_MEM=$(CONFIG_BROADCOM_WIFI_RESERVED_MEM)
+DHDCFLAGS += -DCONFIG_DHD_USE_SCHED_SCAN=$(CONFIG_DHD_USE_SCHED_SCAN)
+DHDCFLAGS += -DCONFIG_DHD_SET_RANDOM_MAC_VAL=$(CONFIG_DHD_SET_RANDOM_MAC_VAL)
+DHDCFLAGS += -DCONFIG_WLAN_REGION_CODE=$(CONFIG_WLAN_REGION_CODE)
+DHDCFLAGS += -DCONFIG_WLAIBSS=$(CONFIG_WLAIBSS)
+DHDCFLAGS += -DCONFIG_WL_RELMCAST=$(CONFIG_WL_RELMCAST)
+DHDCFLAGS += -DCONFIG_BCMDHD_PREALLOC_MEMDUMP=$(CONFIG_BCMDHD_PREALLOC_MEMDUMP)

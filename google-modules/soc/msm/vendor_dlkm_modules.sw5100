@@ -1,0 +1,7 @@
+# Use a regular expression that matches any filename to copy all modules
+# into vendor_dlkm partition.
+#
+# While all of the modules will be in the vendor_dlkm partition, only
+# the modules not loaded in first stage init (modules in vendor_kernel_boot)
+# will be loaded from the vendor_dlkm partition.
+.*

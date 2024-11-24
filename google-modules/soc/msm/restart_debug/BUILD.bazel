@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "ddk_module",
+)
+
+ddk_module(
+    name = "restart_debug",
+    srcs = [
+        "restart_debug.c",
+    ],
+    out = "restart_debug.ko",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+    deps = [
+        "//private/msm-google:all_headers_aarch64",
+    ],
+)

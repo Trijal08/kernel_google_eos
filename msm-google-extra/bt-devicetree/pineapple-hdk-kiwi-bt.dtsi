@@ -1,0 +1,6 @@
+#include "pineapple-kiwi-bt.dtsi"
+
+&bluetooth {
+	/delete-property/ qcom,bt-ant-ldo-supply;
+	/delete-property/ qcom,bt-ant-ldo-config;
+};

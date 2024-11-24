@@ -1,0 +1,127 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "ddk_headers",
+)
+
+filegroup(
+    name = "monaco_gki_fragment",
+    srcs = [
+        "arch/arm64/configs/monaco_gki.fragment",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "sw5100_gki_fragment",
+    srcs = [
+        "arch/arm64/configs/sw5100.fragment",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "sw5100.dt-bindings",
+    srcs = glob([
+        "include/**",
+    ]),
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+# Share the dt bindings with ddk_modules, by using ddk_headers
+ddk_headers(
+    name = "sw5100.dt-bindings-headers",
+    hdrs = [":sw5100.dt-bindings"],
+    includes = ["include/dtc"],
+    visibility = [
+        "//private/google-modules/soc/msm:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "sw5100_kconfig_ext",
+    srcs = [
+        "Kconfig.ext",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "sw5100_sources",
+    srcs = glob(
+        ["**"],
+        exclude = [
+            ".*",
+            ".*/**",
+            "BUILD.bazel",
+            "**/*.bzl",
+        ],
+    ) + [
+        "//private/google-modules/bms/misc:bms-misc.kconfig",
+        "//private/google-modules/nanohub:nanohub.kconfig",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "msm_undefined",
+    srcs = [
+    ],
+)
+
+filegroup(
+    name = "kasan_sw_tags_kcov_fragments",
+    srcs = [
+        "arch/arm64/configs/kasan_sw_tags.fragment",
+        "arch/arm64/configs/kcov.fragment",
+    ],
+)
+
+filegroup(
+    name = "kunit_fragment",
+    srcs = [
+        "arch/arm64/configs/kunit.fragment",
+    ],
+)
+
+label_flag(
+    name = "msm_kernel_build",
+    build_setting_default = ":msm_undefined",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules:__subpackages__",
+        "//private/msm-google-modules:__subpackages__",
+        "//private/msm-google/drivers/power/supply/qcom:__pkg__",
+    ],
+)
+
+# These files are referred to individually when the define_sw5100_pixel_watch()
+# macro is expanded. Therefore, they must individually be exported to
+# subpackages in private/devices/google.
+exports_files(
+    [
+        "build.config.sw5100",
+        "system_dlkm.props.sw5100",
+        "vendor_dlkm.blocklist.monaco",
+        "vendor_dlkm_modules.sw5100",
+        "vendor_dlkm.props.sw5100",
+        "vendor_kernel_boot_charger_modules.sw5100",
+        "vendor_kernel_boot_modules.monaco",
+        "vendor_kernel_boot_modules.sw5100",
+        "vendor_kernel_boot_recovery_modules.sw5100",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+)

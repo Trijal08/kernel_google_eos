@@ -1,0 +1,144 @@
+// SPDX-License-Identifier: GPL-2.0
+
+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+
+&qupv3_se7_2uart_a {
+	qcom,auto-suspend-disable;
+	status = "ok";
+};
+
+&pm5100_s5 {
+	regulator-min-microvolt = <600000>;
+	regulator-max-microvolt = <1104000>;
+	regulator-boot-on;
+	regulator-always-on;
+	qcom,init-enable = <1>;
+	qcom,init-voltage = <1056000>;
+};
+
+&spmi_bus {
+	qcom,pm5100@0 {
+		sensorhub_spmi: sensorhub-spmi {
+			compatible = "sensorhub,spmi";
+		};
+	};
+};
+
+&qupv3_se4_spi {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-1 = <&qupv3_se4_spi_mosi_active>, <&qupv3_se4_spi_miso_active>,
+		<&qupv3_se4_spi_clk_active>, <&qupv3_se4_spi_cs_active>;
+	status = "ok";
+	qcom,vote-index = <1 1 0>;
+
+	sensorhub: sensorhub@0 {
+		compatible = "nanohub";
+		reg = <0>;
+		spi-cpol;
+		spi-cpha;
+		spi-max-frequency = <33333333>;
+		sensorhub,nreset-gpio = <&pm5100_gpios 6 0>;
+		sensorhub,boot0-gpio = <&tlmm 32 0>;
+		sensorhub,boot2-gpio = <&tlmm 34 0>;
+		sensorhub,wakeup-gpio = <&tlmm 80 0>;
+		sensorhub,irq1-gpio = <&tlmm 104 0>;
+		sensorhub,spmi = <&sensorhub_spmi>;
+		sensorhub,afe_control = <0xd846>;
+		sensorhub,vddcore_control = <0xa740>;
+		sensorhub,vddcore_enable = <0xa746>;
+		sensorhub,vddcore_voltage = <1056000>;
+		sensorhub,clk32_control = <0x6246>;
+		sensorhub,bob_ext_ctrl1_control = <0xe531>;
+		sensorhub,s5a_pgood_state_control = <0x9644>;
+		sensorhub,pmic_irq_enable = <0>;
+		sensorhub,static-supplies = "rt5xx-vddio";
+		sensorhub,rt5xx-vddio-supply = <&L19A>;
+		sensorhub,rt5xx-vddio-voltage = <1800000 1800000>;
+		sensorhub,rt5xx-vddio-current = <10000>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&sensorhub_nreset &sensorhub_pmic_irq &sensorhub_boot0
+		             &sensorhub_boot2 &sensorhub_wakeup &sensorhub_irq1>;
+		status = "ok";
+	};
+};
+
+&pm5100_gpios {
+	sensorhub_pins {
+		sensorhub_nreset: sensorhub-nreset {
+			pinconf {
+				pins = "gpio6";
+				function = "normal";
+				qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
+				bias-pull-up;
+				drive-open-drain;
+				output-high;
+			};
+		};
+
+		sensorhub_pmic_irq: sensorhub-pmic-irq {
+			pinconf {
+				pins = "gpio5";
+				function = "normal";
+				qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
+				bias-disable;
+				drive-open-drain;
+				output-high;
+			};
+		};
+	};
+};
+
+&tlmm {
+	sensorhub_pins {
+		sensorhub_boot0: sensorhub-boot0 {
+			mux {
+				pins = "gpio32";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio32";
+				drive-strength = <6>;
+				bias-disable;
+			};
+		};
+
+		sensorhub_boot2: sensorhub-boot2 {
+			mux {
+				pins = "gpio34";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio34";
+				drive-strength = <6>;
+				bias-disable;
+				output-high;
+			};
+		};
+
+		sensorhub_wakeup: sensorhub-wakeup {
+			mux {
+				pins = "gpio80";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio80";
+				drive-strength = <6>;
+				bias-disable;
+			};
+		};
+
+		sensorhub_irq1: sensorhub-irq1 {
+			mux {
+				pins = "gpio104";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio104";
+				drive-strength = <6>;
+				bias-pull-up;
+				input-enable;
+			};
+		};
+	};
+};

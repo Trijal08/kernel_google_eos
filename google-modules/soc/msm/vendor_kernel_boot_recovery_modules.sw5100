@@ -1,0 +1,24 @@
+#
+# sw5100 common modules loaded during first stage init when
+# booting into recovery mode from vendor_kernel_boot.
+#
+eud.ko
+dwc3-msm.ko
+phy-generic.ko
+phy-msm-snps-hs.ko
+google-extcon-shim.ko
+qpnp-smblite-main.ko
+qti-qbg-main.ko
+gvotable.ko
+qcom_ipc_logging.ko
+qcom-vadc-common.ko
+qcom-spmi-adc5-gen3.ko
+pinctrl-spmi-gpio.ko
+qpnp-power-on.ko
+logbuffer.ko
+sw5100_bms.ko
+google-battery.ko
+google-bms.ko
+google-charger.ko
+msm_gpi.ko
+i2c-msm-geni.ko

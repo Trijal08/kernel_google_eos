@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "ddk_module",
+)
+
+ddk_module(
+    name = "wlan_mac",
+    srcs = [
+        "google_wlan_mac.c",
+    ],
+    out = "google_wlan_mac.ko",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+    deps = [
+        "//private/msm-google:all_headers_aarch64",
+        "//private/msm-google-modules/wlan/platform:monaco_gki_cnss_utils",
+        "//private/msm-google-modules/wlan/platform:wlan-platform-headers",
+    ],
+)

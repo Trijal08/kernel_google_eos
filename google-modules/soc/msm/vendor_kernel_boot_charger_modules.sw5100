@@ -1,0 +1,17 @@
+#
+# sw5100 common modules loaded during first stage init when booting into
+# charger mode from vendor_kernel_boot
+# (This list is concatenated with the platform common modules
+# from vendor_kernel_boot_modules.monaco)
+#
+qpnp-smblite-main.ko
+qti-qbg-main.ko
+gvotable.ko
+qcom-vadc-common.ko
+qcom-spmi-adc5-gen3.ko
+pinctrl-spmi-gpio.ko
+logbuffer.ko
+sw5100_bms.ko
+google-battery.ko
+google-bms.ko
+google-charger.ko

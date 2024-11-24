@@ -1,0 +1,131 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load("//build/kernel/kleaf:kernel.bzl", "ddk_headers", "ddk_module", "kernel_module_group")
+
+ddk_headers(
+    name = "ddk_headers",
+    hdrs = glob([
+        "*.h",
+        "include/**/*.h",
+    ]),
+    includes = ["include"],
+)
+
+ddk_module(
+    name = "cl_dsp-core",
+    srcs = [
+        "cl_dsp.c",
+        "cl_dsp-debugfs.c",
+    ],
+    out = "cl_dsp-core.ko",
+    defconfig = "defconfig",
+    kconfig = "Kconfig",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    local_defines = [
+        "DYNAMIC_DEBUG_MODULE",
+        "CONFIG_INPUT_CS40L26_ATTR_UNDER_BUS",
+        "CONFIG_GOOG_CUST",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+    deps = [
+        ":ddk_headers",
+        "//private/msm-google:all_headers_aarch64",
+    ],
+)
+
+ddk_module(
+    name = "cs40l26-core",
+    srcs = [
+        "cs40l26.c",
+        "cs40l26-debugfs.c",
+        "cs40l26-sysfs.c",
+        "cs40l26-tables.c",
+    ],
+    out = "cs40l26-core.ko",
+    defconfig = "defconfig",
+    kconfig = "Kconfig",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    local_defines = [
+        "DYNAMIC_DEBUG_MODULE",
+        "CONFIG_INPUT_CS40L26_ATTR_UNDER_BUS",
+        "CONFIG_GOOG_CUST",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+    deps = [
+        ":ddk_headers",
+        "//private/google-modules/amplifiers/cs40l26:cl_dsp-core",
+        "//private/msm-google:all_headers_aarch64",
+    ],
+)
+
+ddk_module(
+    name = "cs40l26-i2c",
+    srcs = [
+        "cs40l26-i2c.c",
+    ],
+    out = "cs40l26-i2c.ko",
+    defconfig = "defconfig",
+    kconfig = "Kconfig",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    local_defines = [
+        "DYNAMIC_DEBUG_MODULE",
+        "CONFIG_INPUT_CS40L26_ATTR_UNDER_BUS",
+        "CONFIG_GOOG_CUST",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+    deps = [
+        ":ddk_headers",
+        "//private/google-modules/amplifiers/cs40l26:cs40l26-core",
+        "//private/msm-google:all_headers_aarch64",
+    ],
+)
+
+ddk_module(
+    name = "snd-soc-cs40l26",
+    srcs = [
+        "cs40l26-codec.c",
+    ],
+    out = "snd-soc-cs40l26.ko",
+    defconfig = "defconfig",
+    kconfig = "Kconfig",
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    local_defines = [
+        "DYNAMIC_DEBUG_MODULE",
+        "CONFIG_INPUT_CS40L26_ATTR_UNDER_BUS",
+        "CONFIG_GOOG_CUST",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+    deps = [
+        ":ddk_headers",
+        "//private/google-modules/amplifiers/cs40l26:cl_dsp-core",
+        "//private/google-modules/amplifiers/cs40l26:cs40l26-core",
+        "//private/msm-google:all_headers_aarch64",
+        "//private/msm-google-modules/audio:monaco_gki_modules",
+    ],
+)
+
+kernel_module_group(
+    name = "cs40l26",
+    srcs = [
+        ":cl_dsp-core",
+        ":cs40l26-core",
+        ":cs40l26-i2c",
+        ":snd-soc-cs40l26",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/gs:__pkg__",
+    ],
+)

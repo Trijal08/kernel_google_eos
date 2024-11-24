@@ -1,0 +1,92 @@
+// SPDX-License-Identifier: GPL-2.0
+// base on: monaco.dtsi
+
+#include <bindings/google,hsuart.h>
+#include "../vendor/qcom/monaco.dtsi"
+#include "../audio-devicetree/monaco-audio.dtsi"
+#include "../audio-devicetree/monaco-audio-overlay.dtsi"
+#include "../video-devicetree/monaco-vidc.dtsi"
+#include "../graphics-devicetree/gpu/monaco-gpu.dtsi"
+#include "../display-devicetree/display/monaco-sde-display.dtsi"
+#include "sw5100-i2s.dtsi"
+#include "sw5100-pinctrl.dtsi"
+#include "sw5100-qupv3.dtsi"
+#include "sw5100-sdhc.dtsi"
+
+&aliases {
+	hsuart1 = &HSUART1;
+	i2c0 = &qupv3_se0_i2c;
+};
+
+&firmware {
+	/delete-node/ android;
+};
+
+&tx_macro {
+	/delete-property/ qcom,is-used-swr-gpio;
+	qcom,swr-gpio-is-used = <0>;
+};
+
+&swr1 {
+	interrupt-parent = <&intc>;
+	interrupts = <GIC_SPI 297 IRQ_TYPE_LEVEL_HIGH>;
+};
+
+&va_macro {
+	/delete-property/ qcom,is-used-swr-gpio;
+	qcom,swr-gpio-is-used = <1>;
+};
+
+&swr0 {
+	interrupt-parent = <&intc>;
+	interrupts =
+		<GIC_SPI 296 IRQ_TYPE_LEVEL_HIGH>,
+		<GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+};
+
+&soc {
+	/delete-node/ qcom,battery-data;
+
+	sw5100_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <15>;
+	};
+
+	subsystem-sleep-stats@4690000 {
+		compatible = "qcom,subsystem-sleep-stats-v2";
+		reg = <0x4690000 0x400>;
+		ddr-freq-update;
+	};
+
+};
+
+&pm5100_l28 {
+	regulator-max-microvolt = <3304000>;
+};
+
+&pm5100_charger {
+	qcom,battery-data = <&sw5100_batterydata>;
+	/delete-property/ qcom,fcc-stepping-enable;
+	/delete-property/ qcom,fcc-step-delay-ms;
+	/delete-property/ qcom,fcc-step-size-ua;
+	/delete-property/ qcom,fcc-step-start-ua;
+};
+
+&monaco_snd {
+	/delete-property/ qcom,cdc-dmic01-gpios;
+	/delete-property/ qcom,cdc-dmic23-gpios;
+
+	qcom,mi2s-audio-intf = <0>;
+};
+
+// TODO: b/300099373 - Delete once qcom patch lands setting this in monaco
+&smmu_sde_unsec {
+	clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
+	clock-names = "mdp_core_clk";
+};
+
+&spmi_bus {
+    qcom,pm5100@0 {
+        pon_hlos: pon_hlos@1300 {
+        };
+    };
+};

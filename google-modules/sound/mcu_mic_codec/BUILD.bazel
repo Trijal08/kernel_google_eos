@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "kernel_module",
+)
+
+kernel_module(
+    name = "mcu_mic_codec",
+    srcs = glob([
+        "**/*.c",
+    ]) + [
+        "Kbuild",
+        "//private/google-modules/nanohub:nanohub_headers",
+    ],
+    outs = [
+        "mcu_mic_codec.ko",
+    ],
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+    ],
+    deps = [
+        "//private/google-modules/nanohub",
+    ],
+)

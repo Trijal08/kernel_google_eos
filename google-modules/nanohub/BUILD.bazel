@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+load(
+    "//build/kernel/kleaf:kernel.bzl",
+    "ddk_headers",
+    "kernel_module",
+)
+
+ddk_headers(
+    name = "include_nanohub_headers",
+    hdrs = [":nanohub_headers"],
+    includes = ["."],
+    visibility = [
+        "//private/google-modules:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "nanohub_headers",
+    srcs = [
+        "nanohub_exports.h",
+    ],
+    visibility = [
+        "//private/google-modules:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "nanohub.kconfig",
+    srcs = [
+        "Kconfig",
+    ],
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules/soc/msm:__pkg__",
+    ],
+)
+
+kernel_module(
+    name = "nanohub",
+    srcs = glob([
+        "**/*.c",
+        "**/*.h",
+    ]) + [
+        "Kbuild",
+    ],
+    outs = [
+        "nanohub.ko",
+    ],
+    kernel_build = "//private/google-modules/soc/msm:msm_kernel_build",
+    visibility = [
+        "//private/devices/google:__subpackages__",
+        "//private/google-modules:__subpackages__",
+    ],
+)

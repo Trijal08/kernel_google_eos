@@ -1,0 +1,21 @@
+#
+# Additional sw5100 specific modules loaded during first stage init from
+# the vendor_kernel_boot partition.
+#
+# This list contains modules that are required for first stage init on all
+# sw5100 based platforms, in addition to the modules in
+# vendor_kernel_boot_modules.monaco
+#
+msm_drm.ko
+panel_event_notifier.ko
+nanohub.ko
+mcu_display.ko
+qseecom_dlkm.ko
+qseecom_proxy.ko
+smcinvoke_dlkm.ko
+gpucc-monaco.ko
+sched-walt.ko
+msm_performance.ko
+msm_sysstats.ko
+msm_kgsl.ko
+coresight.ko

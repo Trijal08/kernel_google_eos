@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Copyright (C) 2024 Google LLC
+
+build:disable_symbol_trimming --notrim
+build:disable_symbol_trimming --nokmi_symbol_list_strict_mode
+build:disable_symbol_trimming --nokmi_symbol_list_violations_check
+build:disable_symbol_trimming --config=no_download_gki
+
+build:pixel_debug_common --config=disable_symbol_trimming
+
+build:download_gki --use_prebuilt_gki
+build:download_gki --use_signed_prebuilts
+build:download_gki --action_env=KLEAF_DOWNLOAD_BUILD_NUMBER_MAP="gki_prebuilts=12384703"
+build:no_download_gki --use_prebuilt_gki=false
+
+# disable GKI prebuilts by default
+#build --config=no_download_gki
+
+# disable symbol trimming, and consequently, GKI prebuilts by default
+#build --config=disable_symbol_trimming
+
+# enable GKI prebuilts by default
+build --config=download_gki
+
+# This is required for the graphics external module, since it refers to
+# internal headers (e.g. header files under drivers/)
+#
+# TODO: This should be removed eventually, as modules should only be referring
+# to public headers. References to internal headers may suggest that those
+# headers should be made public, instead of internal.
+build --allow_ddk_unsafe_headers
+
+build:kasan_sw_tags_kcov --config=pixel_debug_common --defconfig_fragment=//private/google-modules/soc/msm:kasan_sw_tags_kcov_fragments
+build:kunit --config=pixel_debug_common --defconfig_fragment=//private/google-modules/soc/msm:kunit_fragment
+
+# Placeholders for device specific bazelrc files. Add as many as you need.
+try-import %workspace%/.d1.bazelrc
+try-import %workspace%/.d2.bazelrc
+try-import %workspace%/.d3.bazelrc
+try-import %workspace%/.d4.bazelrc
+try-import %workspace%/.d5.bazelrc

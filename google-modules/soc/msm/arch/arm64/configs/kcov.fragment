@@ -1,0 +1,2 @@
+CONFIG_KCOV=y
+# CONFIG_RANDOMIZE_BASE is not set

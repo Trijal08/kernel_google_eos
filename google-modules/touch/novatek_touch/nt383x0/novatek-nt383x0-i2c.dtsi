@@ -1,0 +1,144 @@
+/*
+ * Copyright (C) 2010 - 2018 Novatek, Inc.
+ *
+ * $Revision: 52741 $
+ * $Date: 2019-11-06 15:04:40 +0800 (週三, 06 十一月 2019) $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ */
+
+
+&i2c_3 {
+	status = "ok";
+
+	/* Novatek device tree node */
+	novatek@62 {
+		compatible = "novatek,NVT-ts";
+		reg = <0x62>;
+		status = "ok";
+
+		novatek,reset-gpio = <&msm_gpio 12 0x00>;
+		novatek,irq-gpio = <&msm_gpio 13 0x2001>;
+
+		/* MP */
+		//novatek,mp-support-dt;
+
+		novatek-mp-criteria-nvtpid@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "novatek-mp-criteria-nvtpid";
+
+			/* MP Config */
+			IC_X_CFG_SIZE = <6>;
+			IC_Y_CFG_SIZE = <6>;
+			IC_KEY_CFG_SIZE = <0>;
+			X_Channel = <6>;
+			Y_Channel = <6>;
+			AIN_X = <0 1 2 3 4 5>;
+			AIN_Y = <0 1 2 3 4 5>;
+			AIN_KEY = <0 1 2 0xFF>;
+
+			/* MP Criteria */
+			PS_Config_Lmt_Short_Rawdata_P = <
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008 14008 14008 14008
+				14008 14008 14008>;
+
+			PS_Config_Lmt_Short_Rawdata_N = <
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0>;
+
+			PS_Config_Lmt_Open_Rawdata_P = <
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120 5120 5120 5120
+				5120 5120 5120>;
+
+			PS_Config_Lmt_Open_Rawdata_N = <
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511) (-511) (-511) (-511)
+				(-511) (-511) (-511)>;
+
+			PS_Config_Lmt_FW_Rawdata_P = <
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000 10000 10000 10000
+				10000 10000 10000>;
+
+			PS_Config_Lmt_FW_Rawdata_N = <
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0>;
+
+			PS_Config_Lmt_FW_CC_P = <
+				512 512 512 512 512 512
+				512 512 512 512 512 512
+				512 512 512 512 512 512
+				512 512 512 512 512 512
+				512 512 512 512 512 512
+				512 512 512 512 512 512
+				512 512 512>;
+
+			PS_Config_Lmt_FW_CC_N = <
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0 0 0 0
+				0 0 0>;
+
+			PS_Config_Lmt_FW_Diff_P = <
+				300 300 300 300 300 300
+				300 300 300 300 300 300
+				300 300 300 300 300 300
+				300 300 300 300 300 300
+				300 300 300 300 300 300
+				300 300 300 300 300 300
+				300 300 300>;
+
+			PS_Config_Lmt_FW_Diff_N = <
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300) (-300) (-300) (-300)
+				(-300) (-300) (-300)>;
+
+			PS_Config_Diff_Test_Frame = <50>;
+		};
+	};
+};

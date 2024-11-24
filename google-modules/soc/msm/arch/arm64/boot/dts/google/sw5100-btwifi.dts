@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0
+// base on: monacop.dts
+
+/dts-v1/;
+
+#include "sw5100-btwifi.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. MonacoP SoC";
+	compatible = "qcom,monacop";
+	qcom,board-id = <0 0>;
+};
