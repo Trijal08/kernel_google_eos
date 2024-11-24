@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: GPL-2.0
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&tlmm {
+	pix_int_active: pix-int-active {
+		mux {
+			pins = "gpio33";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio33";
+			bias-pull-up;
+		};
+	};
+	pix_int_suspend: pix-int-suspend {
+		mux {
+			pins = "gpio33";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio33";
+			bias-pull-up;
+		};
+	};
+};
+
+&qupv3_se0_i2c {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	status = "ok";
+
+	pixart_pat9126: pixart_pat9126@75 {
+		status = "okay";
+		compatible = "pixart,pat9126";
+		reg = <0x75>;
+		pixart,inverse-x;
+		interrupt-parent = <&tlmm>;
+		interrupts = <33 IRQ_TYPE_LEVEL_LOW>;
+		pixart,vld-supply = <&L28A>; /* VLD: L28 */
+		pixart,vld-active-load = <11000>;
+		pixart,vld-sleep-load = <350>;
+		pixart,vld-voltage = <3000000>;
+		pixart,vdd-supply = <&L20A>; /* VDD: L20 */
+		pixart,vdd-active-load = <11000>;
+		pixart,vdd-sleep-load = <350>;
+		pixart,vdd-voltage = <1800000>;
+		pixart,irq-gpio = <&tlmm 33 IRQ_TYPE_LEVEL_LOW>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&pix_int_active>;
+		pinctrl-1 = <&pix_int_suspend>;
+		display-panels = <&dsi_wf012fb_amoled_12_cmd
+			&dsi_amb120dd01_amoled_12_cmd
+			&dsi_amb120dd01_evt1_amoled_12_cmd>;
+	};
+};

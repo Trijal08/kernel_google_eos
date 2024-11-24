@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: GPL-2.0
+
+&tlmm {
+	nfc {
+		nfc_irq_pin: nfc_irq_pin {
+			mux {
+				/* NFC Read Interrupt */
+				pins = "gpio7";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio7";
+				drive-strength = <2>; /* 2 MA */
+				bias-disable;
+			};
+		};
+
+		nfc_enable_pin: nfc_enable_pin {
+			mux {
+				/* Enable pins */
+				pins = "gpio6";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio6";
+				drive-strength = <2>; /* 2 MA */
+				bias-disable;
+			};
+		};
+	};
+};
+
+&pm5100_gpios {
+	nfc_clk {
+		nfc_clk_req_pin: nfc_clk_req_pin {
+			pins = "gpio14";
+			function = "normal";
+			input-enable;
+			power-source = <1>;
+		};
+	};
+};
+
+&qupv3_se0_i2c {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	status = "ok";
+	sn220@28 {
+		compatible = "nxp,sn-nci";
+		reg = <0x28>;
+		nxp,sn-irq = <&tlmm 7 0x00>;
+		nxp,sn-ven-rstn = <&tlmm 6 0x00>;
+		qcom,sn-clkreq = <&pm5100_gpios 14 0x00>;
+		interrupt-parent = <&tlmm>;
+		qcom,clk-src = "RFCLK3";
+		interrupts = <7 0>;
+		interrupt-names = "nfc_irq";
+		pinctrl-names = "default";
+		pinctrl-0 = <&nfc_irq_pin &nfc_enable_pin &nfc_clk_req_pin>;
+		clocks = <&rpmcc RPM_SMD_RF_CLK3_PIN>;
+		clock-names = "ref_clk";
+		nxp,sn-vddio-supply = <&L20A>;
+		nxp,sn-vddio-active-load = <20000>;
+		nxp,sn-vddio-sleep-load = <1000>;
+	};
+};

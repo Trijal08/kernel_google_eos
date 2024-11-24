@@ -1,0 +1,55 @@
+// SPDX-License-Identifier: GPL-2.0
+
+#include <dt-bindings/gpio/gpio.h>
+
+&tlmm {
+	touch {
+		ts_int_active: ts-int-active {
+			mux {
+				pins = "gpio13";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio13";
+				drive-strength = <2>;
+			};
+		};
+	};
+};
+
+&pm5100_gpios {
+	touch {
+		nfc_active: nfc-active {
+			pinconf {
+				pins = "gpio11";
+				function = "normal";
+				input-enable;
+				power-source = <1>;
+			};
+		};
+	};
+};
+
+&qupv3_se1_i2c {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	status = "okay";
+
+	novatek: novatek@62 {
+		compatible = "novatek,NVT-ts";
+		reg = <0x62>;
+		status = "okay";
+
+		pinctrl-names = "default";
+
+		pinctrl-0 = <&ts_int_active &nfc_active>;
+
+		novatek,irq-gpio = <&tlmm 13 GPIO_ACTIVE_HIGH>;
+		novatek,nfc-active-gpio = <&pm5100_gpios 11 GPIO_ACTIVE_HIGH>;
+		novatek,nfc-active-ms = <10000>;
+		novatek,nfc-debounce-ms = <40>;
+		novatek,baseline-threshold = /bits/ 16 <1200>;
+	};
+};

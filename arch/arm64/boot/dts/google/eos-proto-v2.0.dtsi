@@ -1,0 +1,51 @@
+// SPDX-License-Identifier: GPL-2.0
+
+#include "eos-common.dtsi"
+#include "eos-haptics-v2.dtsi"
+#include "../google-dts-base/sw5100-mcu.dtsi"
+#include "../google-dts-base/sw5100-nanohub.dtsi"
+#include "eos-nfc-v2.dtsi"
+#include "eos-crown.dtsi"
+
+&mcu {
+	board_type = "eos_p2";
+};
+
+&sensorhub {
+	sensorhub,firmware = "mcu_eos_p2.bin";
+};
+
+&pm5100_l20 {
+	regulator-always-on;
+	qcom,init-enable = <1>;
+};
+
+&pm5100_l21 {
+	regulator-always-on;
+	qcom,init-enable = <1>;
+};
+
+&pmx_sde {
+	sde_dsi_default: sde_dsi_default {
+		pinconf {
+			pins = "gpio1", "gpio2";
+			function = "normal";
+			qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
+			bias-disable;
+		};
+	};
+};
+
+&sde_dsi {
+	pinctrl-0 = <&sde_dsi_default &sde_te_active>;
+	pinctrl-1 = <&sde_dsi_default &sde_te_suspend>;
+};
+
+&monaco_snd {
+	qcom,cdc-dmic01-gpios = <&cdc_dmic01_gpios>;
+};
+
+&besbev_codec {
+	cdc-mic-bias-supply = <&L19A>;
+	qcom,cdc-mic-bias-voltage = <1800000 1800000>;
+};

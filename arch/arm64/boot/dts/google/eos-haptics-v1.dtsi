@@ -1,0 +1,71 @@
+// SPDX-License-Identifier: GPL-2.0
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&tlmm {
+	cs40l26_gpio_pins {
+		cs40l26_reset: cs40l26-reset{
+			mux {
+				pins = "gpio18";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio18";
+				drive-strength = <2>;
+			};
+		};
+
+		cs40l26_interrupt: cs40l26-interrupt {
+			mux {
+				pins = "gpio68";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio68";
+				bias-pull-up;
+				input-enable;
+			};
+		};
+	};
+};
+
+&qupv3_se7_i2c_b  {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	status = "ok";
+
+	cs40l26_haptics: cs40l26@43 {
+		compatible = "cirrus,cs40l26a";
+		reg = <0x43>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cs40l26_reset>, <&cs40l26_interrupt>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <68 IRQ_TYPE_LEVEL_LOW>;
+		reset-gpios = <&tlmm 18 0>;
+		VA-supply = <&L19A>;
+
+		cirrus,vibe-state;
+
+		cirrus,vpbr-enable;
+		cirrus,vpbr-thld-mv = <2592>;
+
+		svc-le1 {
+			cirrus,min = <500>; //59.6 uH
+			cirrus,max = <750>; //89.4 uH
+			cirrus,index = <1>;
+		};
+		svc-le2 {
+			cirrus,min = <1000>; //119.2 uH
+			cirrus,max = <1500>; //178.8 uH
+			cirrus,index = <2>;
+		};
+		svc-le3 {
+			cirrus,min = <2000>; //238.4 uH
+			cirrus,max = <2400>; //286.1 uH
+			cirrus,index = <3>;
+		};
+	};
+};

@@ -1,0 +1,124 @@
+// SPDX-License-Identifier: GPL-2.0
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+#include "../google-dts-base/sw5100-rt595.dtsi"
+#include "../bt-devicetree/monaco-bt-standalone.dtsi"
+#include "../wlan-devicetree/monaco-standalone-cnss.dtsi"
+#include "../google-dts-base/sw5100-modem.dtsi"
+#include "../google-dts-base/sw5100-common-memory.dtsi"
+
+#include "eos-sde-display.dtsi"
+#include "eos-touch.dtsi"
+
+&pm5100_gpios {
+	#gpio-cells = <2>;
+
+	key_vol_down {
+		key_vol_down_default: key_vol_down_default {
+			pins = "gpio9";
+			function = "normal";
+			input-enable;
+			bias-pull-up;
+			power-source = <1>;
+		};
+	};
+};
+
+&dsi_wf012fb_amoled_12_cmd {
+	qcom,panel-supply-entries = <&dsi_panel_pwr_supply_nolab_amoled>;
+	qcom,platform-reset-gpio = <&pm5100_gpios 2 0>;
+	qcom,platform-reset-gpio-always-on;
+	touch,firmware = "novatek_ts_fw_boe.bin";
+};
+
+&dsi_amb120dd01_amoled_12_cmd {
+	qcom,panel-supply-entries = <&dsi_panel_pwr_supply_nolab_amoled>;
+	qcom,platform-reset-gpio = <&pm5100_gpios 2 0>;
+	qcom,platform-reset-gpio-always-on;
+	touch,firmware = "novatek_ts_fw_sdc.bin";
+};
+
+&dsi_amb120dd01_evt1_amoled_12_cmd {
+	qcom,panel-supply-entries = <&dsi_panel_pwr_supply_nolab_amoled>;
+	qcom,platform-reset-gpio = <&pm5100_gpios 2 0>;
+	qcom,platform-reset-gpio-always-on;
+	touch,firmware = "novatek_ts_fw_sdc_rot.bin";
+};
+
+&sde_dsi {
+	qcom,dsi-default-panel = <&dsi_wf012fb_amoled_12_cmd>;
+};
+
+&novatek {
+	panel = <&dsi_wf012fb_amoled_12_cmd
+		&dsi_amb120dd01_amoled_12_cmd
+		&dsi_amb120dd01_evt1_amoled_12_cmd>;
+};
+
+&qupv3_se1_i2c {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	status = "ok";
+
+	tsc@24 {
+		compatible = "parade,pt_i2c_adapter";
+		reg = <0x24>;
+		status = "disabled";
+	};
+};
+
+&sw5100_batterydata {
+	#include "qbg-battery-profile-eos-id100.dtsi"
+	#include "qbg-battery-profile-eos-id39.dtsi"
+	#include "qbg-battery-profile-eos-id56.dtsi"
+	#include "qbg-battery-profile-eos-id15.dtsi"
+};
+
+&soc {
+	gpio_keys {
+		pinctrl-0 = <&key_vol_down_default>;
+
+		vol_up {
+			status = "disabled";
+		};
+
+		vol_down {
+			label = "volume_down";
+			gpios = <&pm5100_gpios 9 GPIO_ACTIVE_LOW>;
+			linux,input-type = <1>;
+			linux,code = <KEY_VOLUMEDOWN>;
+			gpio-key,wakeup;
+			debounce-interval = <15>;
+			linux,can-disable;
+		};
+	};
+
+	petc_if: petc_if@0 {
+		compatible = "google,petc_if";
+		display-panels = <&dsi_wf012fb_amoled_12_cmd
+			&dsi_amb120dd01_amoled_12_cmd
+			&dsi_amb120dd01_evt1_amoled_12_cmd>;
+		clones = <&pixart_pat9126 &pon_hlos>;
+	};
+};
+
+&pm5100_charger {
+	/* SDP 500mA mode for float chargers */
+	qcom,float-option = <2>;
+
+	/* Always charge on SDP by ignoring ICL requests from USB stack */
+	google,sdp-icl-req-ignored;
+
+	/* Enable HVDCP3 (QC3) charger detection */
+	google,hvdcp3-detect-en;
+};
+
+&pm5100_qbg {
+	qcom,iterm-ma = <35>;
+};
+
+&google_hvdcp {
+	status = "okay";
+};
